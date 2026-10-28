@@ -1,11 +1,11 @@
 # Go Report Card
 
-**Grade: A+** (98.3%)
+**Grade: A+** (98.0%)
 
 | Metric | Value |
 | ------ | ----- |
-| Files | 35 |
-| Issues | 3 |
+| Files | 36 |
+| Issues | 4 |
 
 ## Checks
 
@@ -13,7 +13,7 @@
 | ----- | ----- |
 | gofmt | 97% |
 | go_vet | 100% |
-| gocyclo | 94% |
+| gocyclo | 91% |
 | ineffassign | 100% |
 | license | 100% |
 | misspell | 100% |
@@ -28,10 +28,13 @@
 ### gocyclo
 
 - `selector.go`
-  - Line 145: cyclomatic complexity 26 for function escapeCSSIdentifier
-  - Line 48: cyclomatic complexity 21 for function selectorStep
+  - Line 141: cyclomatic complexity 26 for function escapeCSSIdentifier
+  - Line 44: cyclomatic complexity 21 for function selectorStep
 - `traversal.go`
   - Line 641: cyclomatic complexity 23 for function getChildrenWithSiblingType
+- `coverage_completion_test.go`
+  - Line 192: cyclomatic complexity 20 for function TestCoveragePropertiesSelectorsAndUtilities
+  - Line 36: cyclomatic complexity 17 for function TestCoverageArrayFilterAndQueryEdges
 
 ---
 
