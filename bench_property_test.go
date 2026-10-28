@@ -43,7 +43,7 @@ func BenchmarkLength(b *testing.B) {
 
 func BenchmarkHtml(b *testing.B) {
 	b.StopTimer()
-	sel := DocW().Find("h2")
+	sel := DocW().Find("h2").Eq(1)
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = sel.Html()
@@ -55,6 +55,9 @@ func BenchmarkAddClass(b *testing.B) {
 	sel := DocW().Find("li")
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
+		b.StopTimer()
+		sel.RemoveClass("foo bar baz")
+		b.StartTimer()
 		sel.AddClass("foo bar baz")
 	}
 }
@@ -62,9 +65,11 @@ func BenchmarkAddClass(b *testing.B) {
 func BenchmarkRemoveClass(b *testing.B) {
 	b.StopTimer()
 	sel := DocW().Find("li")
-	sel.AddClass("foo bar baz")
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
+		b.StopTimer()
+		sel.AddClass("foo bar baz")
+		b.StartTimer()
 		sel.RemoveClass("foo bar baz")
 	}
 }
