@@ -26,11 +26,7 @@ func SelectorForNode(node *html.Node) (string, bool) {
 	}
 
 	var steps []string
-	for current := node; current != nil; current = current.Parent {
-		if current.Type == html.DocumentNode {
-			break
-		}
-
+	for current := node; current != nil && current.Type != html.DocumentNode; current = current.Parent {
 		step, optimized, ok := selectorStep(current, current == node)
 		if !ok {
 			return "", false
