@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/PuerkitoBio/goquery"
+	"github.com/soulteary/goquery"
 	"golang.org/x/net/html"
 )
 
