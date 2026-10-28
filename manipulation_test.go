@@ -618,6 +618,22 @@ func TestWrapAllHtml(t *testing.T) {
 	printSel(t, doc.Selection)
 }
 
+func TestWrapAllHtmlRawTextElement(t *testing.T) {
+	// The wrapper must be parsed in the parent's context. Parsed inside a
+	// textarea it would become text, and the textarea would be lost.
+	doc := loadString(t, `<html><body><textarea>hi</textarea></body></html>`)
+	doc.Find("textarea").WrapAllHtml(`<div class="wrap"></div>`)
+	assertLength(t, doc.Find("body > div.wrap > textarea").Nodes, 1)
+	printSel(t, doc.Selection)
+}
+
+func TestWrapAllHtmlTextNode(t *testing.T) {
+	doc := loadString(t, `<html><body><p>a <b>b</b></p></body></html>`)
+	doc.Find("p").Contents().WrapAllHtml(`<span class="wrap"></span>`)
+	assertLength(t, doc.Find("p > span.wrap > b").Nodes, 1)
+	printSel(t, doc.Selection)
+}
+
 func TestWrapInnerNoContent(t *testing.T) {
 	doc := Doc2Clone()
 	doc.Find(".one").WrapInner(".two")
@@ -878,4 +894,34 @@ func TestSetHtmlFormAncestorContext(t *testing.T) {
 	assertLength(t, doc.Find("#t-out form input").Nodes, 1)
 	assertLength(t, doc.Find("#t-in form").Nodes, 0)
 	assertLength(t, doc.Find("#t-in input").Nodes, 1)
+}
+
+func TestAppendHtmlNamespaceContext(t *testing.T) {
+	doc := loadString(t, `<html><head><title id="t-html">a</title></head><body>
+		<svg><title id="t-svg">b</title></svg>
+	</body></html>`)
+
+	doc.Find("title").AppendHtml(`<b>x</b>`)
+
+	// In an HTML <title> the markup is text; in an SVG <title> it is an element.
+	assertLength(t, doc.Find("#t-html b").Nodes, 0)
+	if got := doc.Find("#t-html").Text(); got != "a<b>x</b>" {
+		t.Errorf("html title text = %q, want %q", got, "a<b>x</b>")
+	}
+	assertLength(t, doc.Find("#t-svg b").Nodes, 1)
+}
+
+func TestSetHtmlNamespaceContext(t *testing.T) {
+	doc := loadString(t, `<html><body>
+		<svg><title id="t-svg">b</title></svg>
+		<title id="t-html">a</title>
+	</body></html>`)
+
+	doc.Find("title").SetHtml(`<b>x</b>`)
+
+	assertLength(t, doc.Find("#t-svg b").Nodes, 1)
+	assertLength(t, doc.Find("#t-html b").Nodes, 0)
+	if got := doc.Find("#t-html").Text(); got != "<b>x</b>" {
+		t.Errorf("html title text = %q, want %q", got, "<b>x</b>")
+	}
 }

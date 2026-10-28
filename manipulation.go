@@ -449,8 +449,10 @@ func (s *Selection) WrapAllHtml(htmlStr string) *Selection {
 	var context *html.Node
 	var nodes []*html.Node
 	if len(s.Nodes) > 0 {
-		context = s.Nodes[0]
-		if context.Parent != nil {
+		// The wrapper takes the place of the first node, so parse it in the
+		// context of that node's parent, as WrapHtml does.
+		context = s.Nodes[0].Parent
+		if context != nil && context.Type == html.ElementNode {
 			nodes = parseHtmlWithContext(htmlStr, context, s.parseOpts())
 		} else {
 			nodes = parseHtml(htmlStr, s.parseOpts())
@@ -691,10 +693,14 @@ func hasFormAncestor(n *html.Node) bool {
 }
 
 // cachedParseHtmlWithContext returns parseHtmlWithContext(htmlStr, context), reusing a prior
-// result when context's nodeName has already been seen with the same form ancestor state.
+// result when context's namespace and nodeName have already been seen with the same form
+// ancestor state.
 // Callers pass their own cache map so the cache lifetime matches the caller's loop scope.
 func cachedParseHtmlWithContext(cache map[string][]*html.Node, htmlStr string, context *html.Node, opts []html.ParseOption) []*html.Node {
-	key := nodeName(context)
+	// The namespace is part of the key because the same tag name parses
+	// differently in HTML and foreign content, e.g. <title> or <style>
+	// in HTML versus inside <svg>.
+	key := context.Namespace + " " + nodeName(context)
 	if hasFormAncestor(context) {
 		key += ":form"
 	}
