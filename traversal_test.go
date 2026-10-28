@@ -38,6 +38,47 @@ func TestFindBig(t *testing.T) {
 	assertLength(t, sel3.Nodes, 248)
 }
 
+func TestFindNodesPreservesOrderAndDeduplicates(t *testing.T) {
+	doc := Doc()
+	root := doc.Find(".pvk-content")
+	nodes := root.Find("p").Nodes
+	if len(nodes) < 2 {
+		t.Fatal("test document must contain at least two paragraphs")
+	}
+
+	got := root.FindNodes(nodes[1], nodes[0], nodes[1], nil)
+	assertLength(t, got.Nodes, 2)
+	if got.Nodes[0] != nodes[1] || got.Nodes[1] != nodes[0] {
+		t.Error("FindNodes did not preserve candidate order")
+	}
+}
+
+func TestFindNodesExcludesSelectionRoots(t *testing.T) {
+	doc := Doc()
+	root := doc.Find(".pvk-content")
+	child := root.Find("p").First().Get(0)
+
+	got := root.FindNodes(root.Get(0), child)
+	assertLength(t, got.Nodes, 1)
+	if got.Get(0) != child {
+		t.Error("FindNodes returned the selection root itself")
+	}
+}
+
+func TestFindNodesWithOverlappingRoots(t *testing.T) {
+	doc := Doc()
+	outer := doc.Find("body")
+	inner := outer.Find(".pvk-content")
+	target := inner.Find("p").First().Get(0)
+	roots := &Selection{Nodes: []*html.Node{outer.Get(0), inner.Get(0)}, document: doc}
+
+	got := roots.FindNodes(target, target)
+	assertLength(t, got.Nodes, 1)
+	if got.Get(0) != target {
+		t.Error("FindNodes did not return the descendant of overlapping roots")
+	}
+}
+
 func TestChainedFind(t *testing.T) {
 	sel := Doc().Find("div.hero-unit").Find(".row-fluid")
 	assertLength(t, sel.Nodes, 4)

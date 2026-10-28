@@ -34,7 +34,7 @@ func BenchmarkNot(b *testing.B) {
 		if n == 0 {
 			n = sel.Not(".toclevel-2").Length()
 		} else {
-			sel.Filter(".toclevel-2")
+			sel.Not(".toclevel-2")
 		}
 	}
 	if n != 371 {

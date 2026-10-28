@@ -51,12 +51,38 @@ func (s *Selection) FindSelection(sel *Selection) *Selection {
 // Selection, filtered by some nodes. It returns a new Selection object
 // containing these matched elements.
 func (s *Selection) FindNodes(nodes ...*html.Node) *Selection {
-	return pushStack(s, mapNodes(nodes, func(i int, n *html.Node) []*html.Node {
-		if sliceContains(s.Nodes, n) {
-			return []*html.Node{n}
+	if len(nodes) == 0 || len(s.Nodes) == 0 {
+		return pushStack(s, nil)
+	}
+
+	// Index the roots once so each candidate only needs a single walk up its
+	// ancestor chain. The previous implementation walked that chain once for
+	// every root, making this O(len(nodes) * len(s.Nodes) * depth).
+	roots := make(map[*html.Node]struct{}, len(s.Nodes))
+	for _, root := range s.Nodes {
+		roots[root] = struct{}{}
+	}
+
+	capacity := min(len(nodes), len(s.Nodes))
+	result := make([]*html.Node, 0, capacity)
+	seen := make(map[*html.Node]struct{}, capacity)
+	for _, node := range nodes {
+		if node == nil {
+			continue
 		}
-		return nil
-	}))
+		if _, duplicate := seen[node]; duplicate {
+			continue
+		}
+		for parent := node.Parent; parent != nil; parent = parent.Parent {
+			if _, found := roots[parent]; found {
+				result = append(result, node)
+				seen[node] = struct{}{}
+				break
+			}
+		}
+	}
+
+	return pushStack(s, result)
 }
 
 // Contents gets the children of each element in the Selection,
