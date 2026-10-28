@@ -1,7 +1,7 @@
 module github.com/PuerkitoBio/goquery
 
 require (
-	github.com/andybalholm/cascadia v1.3.5
+	github.com/soulteary/cascadia v1.0.0
 	golang.org/x/net v0.58.0
 )
 
