@@ -1,8 +1,19 @@
 # goquery - a little like that j-thing, only in Go
 
-[![Build Status](https://github.com/PuerkitoBio/goquery/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/PuerkitoBio/goquery/actions)
+[![Go Test Matrix](https://github.com/soulteary/goquery/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/soulteary/goquery/actions/workflows/test.yml)
+[![Go Test Coverage](./.github/coverage.svg)](./.github/go-test-report.md)
+[![Go Report Card](./.github/goreportcard.svg)](./.github/goreportcard-report.md)
 [![Go Reference](https://pkg.go.dev/badge/github.com/PuerkitoBio/goquery.svg)](https://pkg.go.dev/github.com/PuerkitoBio/goquery)
-[![Sourcegraph Badge](https://sourcegraph.com/github.com/PuerkitoBio/goquery/-/badge.svg)](https://sourcegraph.com/github.com/PuerkitoBio/goquery?badge)
+
+This repository is an API-compatible fork of
+[PuerkitoBio/goquery](https://github.com/PuerkitoBio/goquery). The `master`
+branch tracks upstream and is reserved for synchronization. Fork development
+and release pull requests target `main`.
+
+The fork keeps the upstream module path for compatibility and uses
+[`github.com/soulteary/cascadia`](https://github.com/soulteary/cascadia) as its
+CSS selector engine. Code intended for an upstream pull request should start
+from `master`; fork-specific changes should start from `main`.
 
 goquery brings a syntax and a set of features similar to [jQuery][] to the [Go language][go]. It is based on Go's [net/html package][html] and the CSS Selector library [cascadia][]. Since the net/html parser returns nodes, and not a full-featured DOM tree, jQuery's stateful manipulation functions (like height(), css(), detach()) have been left off.
 
@@ -13,6 +24,7 @@ Syntax-wise, it is as close as possible to jQuery, with the same function names 
 ## Table of Contents
 
 * [Installation](#installation)
+* [Tests and quality reports](#tests-and-quality-reports)
 * [Changelog](#changelog)
 * [API](#api)
 * [Examples](#examples)
@@ -43,6 +55,30 @@ Ongoing goquery development is tested on the latest 2 versions of Go.
 
     $ cd $GOPATH/src/github.com/PuerkitoBio/goquery
     $ go test -bench=".*"
+
+## Tests and quality reports
+
+Two workflows protect `main`:
+
+* **Go test matrix** runs the test suite with the race detector on the latest
+  two supported Go versions across Linux, macOS, and Windows.
+* **Go quality** uses
+  [go-test-report-action](https://github.com/soulteary/go-test-report-action)
+  and [goreportcard-action](https://github.com/soulteary/goreportcard-action)
+  to generate coverage, test, and code-quality reports.
+
+Every quality run uploads its reports and raw test results as workflow
+artifacts. Successful `main` runs also update the report files linked by the
+badges above, provided `main` still points to the tested revision. Pull request
+checks have read-only repository access.
+
+To run the main checks locally:
+
+```sh
+go test -race -covermode=atomic -coverprofile=coverage.out ./...
+go tool cover -func=coverage.out
+go vet ./...
+```
 
 ## Changelog
 

@@ -1,5 +1,18 @@
-name: test
-on: [push, pull_request]
+name: Go test matrix
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   GOPROXY: https://proxy.golang.org,direct
@@ -20,6 +33,7 @@ jobs:
         uses: actions/setup-go@v7
         with:
           go-version: ${{ matrix.go-version }}
+          cache: true
 
       - name: Test
-        run: go test ./... -v -cover
+        run: go test -race -cover ./...
