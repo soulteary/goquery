@@ -72,7 +72,7 @@ jobs:
             git switch --force-create reports origin/reports
           else
             git switch --orphan reports
-            git rm -rf .
+            git rm -rf . || true
           fi
           cp "$REPORT_DIR/coverage.svg" .
           cp "$REPORT_DIR/go-test-report.md" .
