@@ -1,17 +1,17 @@
 # Go Report Card
 
-**Grade: A+** (98.0%)
+**Grade: A+** (99.0%)
 
 | Metric | Value |
 | ------ | ----- |
 | Files | 36 |
-| Issues | 4 |
+| Issues | 3 |
 
 ## Checks
 
 | Check | Score |
 | ----- | ----- |
-| gofmt | 97% |
+| gofmt | 100% |
 | go_vet | 100% |
 | gocyclo | 91% |
 | ineffassign | 100% |
@@ -19,11 +19,6 @@
 | misspell | 100% |
 
 ## Issues
-
-### gofmt
-
-- `doc.go`
-  - Line 1: file is not gofmt-ed with -s
 
 ### gocyclo
 
