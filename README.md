@@ -3,14 +3,14 @@
 [![Go Test Matrix](https://github.com/soulteary/goquery/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/soulteary/goquery/actions/workflows/test.yml)
 [![Go Test Coverage](./.github/coverage.svg)](./.github/go-test-report.md)
 [![Go Report Card](./.github/goreportcard.svg)](./.github/goreportcard-report.md)
-[![Go Reference](https://pkg.go.dev/badge/github.com/PuerkitoBio/goquery.svg)](https://pkg.go.dev/github.com/PuerkitoBio/goquery)
+[![Go Reference](https://pkg.go.dev/badge/github.com/soulteary/goquery.svg)](https://pkg.go.dev/github.com/soulteary/goquery)
 
 This repository is an API-compatible fork of
 [PuerkitoBio/goquery](https://github.com/PuerkitoBio/goquery). The `master`
 branch tracks upstream and is reserved for synchronization. Fork development
 and release pull requests target `main`.
 
-The fork keeps the upstream module path for compatibility and uses
+The fork publishes the Go module `github.com/soulteary/goquery` from `main` and uses
 [`github.com/soulteary/cascadia`](https://github.com/soulteary/cascadia) as its
 CSS selector engine. Code intended for an upstream pull request should start
 from `master`; fork-specific changes should start from `main`.
@@ -24,6 +24,7 @@ Syntax-wise, it is as close as possible to jQuery, with the same function names 
 ## Table of Contents
 
 * [Installation](#installation)
+* [Fork highlights](#fork-highlights)
 * [Tests and quality reports](#tests-and-quality-reports)
 * [Changelog](#changelog)
 * [API](#api)
@@ -42,19 +43,41 @@ Required Go version:
 * For `v1.9.0` of goquery, Go 1.18+ is required due to the use of generics.
 * For previous goquery versions, a Go version of 1.1+ was required because of the `net/html` dependency.
 
-Ongoing goquery development is tested on the latest 2 versions of Go.
+Fork releases require Go 1.26 or later and are tested on the latest two
+supported Go versions.
 
-    $ go get github.com/PuerkitoBio/goquery
+```sh
+go get github.com/soulteary/goquery@v1.14.0
+```
 
-(optional) To run unit tests:
+Applications migrating from upstream only need to change the import path; the
+fork retains the existing goquery API.
 
-    $ cd $GOPATH/src/github.com/PuerkitoBio/goquery
-    $ go test
+To run unit tests:
 
-(optional) To run benchmarks (warning: it runs for a few minutes):
+```sh
+go test ./...
+```
 
-    $ cd $GOPATH/src/github.com/PuerkitoBio/goquery
-    $ go test -bench=".*"
+To run benchmarks (warning: the full suite takes several minutes):
+
+```sh
+go test -run '^$' -bench='.' -benchmem ./...
+```
+
+## Fork highlights
+
+* Uses `github.com/soulteary/cascadia` as the selector engine.
+* Generates selectors using Chrome DevTools' **Copy selector** strategy with
+  `SelectorForNode`.
+* Maintains 100% statement coverage, enforced for the module and every package.
+* Reduces `FindNodes`/`FindSelection` latency by approximately 52%, allocated
+  bytes by 49%, and allocations by 87% in the existing large-document
+  benchmark.
+
+The performance figures were measured on an Apple M5 with Go 1.27.3 using
+`-benchtime=500ms -count=5`. They describe that benchmark workload, not a
+guarantee for every selector or document.
 
 ## Tests and quality reports
 
@@ -84,6 +107,7 @@ go vet ./...
 
 **Note that goquery's API is now stable, and will not break.**
 
+*    **2026-10-28 (v1.14.0)** : First independently importable fork release. Use `github.com/soulteary/goquery`; replace the selector engine with `github.com/soulteary/cascadia`; add Chrome-style `SelectorForNode`; incorporate upstream fixes; improve node-based find performance; enforce 100% statement coverage; and require Go 1.26+.
 *    **2026-08-27 (v1.13.0)** : Performance improvements (thanks [@jvoisin][jvs]), add top-level `Text` function with options similar to BeautifulSoup's `get_text` (thanks [@ChrisJr404][chrisjr]), update `go.mod` dependencies, add go1.27 to the test matrix.
 *    **2026-03-15 (v1.12.0)** : Update `go.mod` dependencies, add go1.26 to the test matrix, **goquery now requires Go version 1.25+**.
 *    **2025-11-16 (v1.11.0)** : Update `go.mod` dependencies, add go1.25 to the test matrix, **goquery now requires Go version 1.24+**.
@@ -254,7 +278,7 @@ The [BSD 3-Clause license][bsd], the same as the [Go language][golic]. Cascadia'
 [bsd]: https://opensource.org/licenses/BSD-3-Clause
 [golic]: https://go.dev/LICENSE
 [caslic]: https://github.com/soulteary/cascadia/blob/master/LICENSE
-[doc]: https://pkg.go.dev/github.com/PuerkitoBio/goquery
+[doc]: https://pkg.go.dev/github.com/soulteary/goquery
 [index]: https://api.jquery.com/index/
 [gonet]: https://github.com/golang/net/
 [html]: https://pkg.go.dev/golang.org/x/net/html
