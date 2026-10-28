@@ -1,8 +1,8 @@
 # goquery - a little like that j-thing, only in Go
 
 [![Go Test Matrix](https://github.com/soulteary/goquery/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/soulteary/goquery/actions/workflows/test.yml)
-[![Go Test Coverage](./.github/coverage.svg)](./.github/go-test-report.md)
-[![Go Report Card](./.github/goreportcard.svg)](./.github/goreportcard-report.md)
+[![Go Test Coverage](https://raw.githubusercontent.com/soulteary/goquery/reports/coverage.svg)](https://github.com/soulteary/goquery/blob/reports/go-test-report.md)
+[![Go Report Card](https://raw.githubusercontent.com/soulteary/goquery/reports/goreportcard.svg)](https://github.com/soulteary/goquery/blob/reports/goreportcard-report.md)
 [![Go Reference](https://pkg.go.dev/badge/github.com/soulteary/goquery.svg)](https://pkg.go.dev/github.com/soulteary/goquery)
 
 This repository is an API-compatible fork of
@@ -91,9 +91,9 @@ Two workflows protect `main`:
   to generate coverage, test, and code-quality reports.
 
 Every quality run uploads its reports and raw test results as workflow
-artifacts. Successful `main` runs also update the report files linked by the
-badges above, provided `main` still points to the tested revision. Pull request
-checks have read-only repository access.
+artifacts. Successful `main` runs also publish the report files linked by the
+badges above to the dedicated `reports` branch. Pull request checks have
+read-only repository access.
 
 To run the main checks locally:
 
