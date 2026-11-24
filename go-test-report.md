@@ -4,8 +4,8 @@
 
 | Metric | Value |
 | --- | --- |
-| Total | 367 |
-| Passed | 367 |
+| Total | 372 |
+| Passed | 372 |
 | Failed | 0 |
 | Skipped | 0 |
 | Coverage | 100.00% |
@@ -15,4 +15,4 @@
 
 | Package | Status | Tests | Failed | Coverage |
 | --- | --- | --- | --- | --- |
-| . | pass | 367 | 0 | 100.00% |
+| . | pass | 372 | 0 | 100.00% |
