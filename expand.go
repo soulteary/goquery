@@ -35,7 +35,7 @@ func (s *Selection) Union(sel *Selection) *Selection {
 // AddNodes adds the specified nodes to those in the
 // current selection and returns a new Selection object.
 func (s *Selection) AddNodes(nodes ...*html.Node) *Selection {
-	return pushStack(s, appendWithoutDuplicates(s.Nodes, nodes, nil))
+	return pushStack(s, appendWithoutDuplicates(s.Nodes[:len(s.Nodes):len(s.Nodes)], nodes, nil))
 }
 
 // AndSelf adds the previous set of elements on the stack to the current set.
@@ -58,6 +58,9 @@ func (s *Selection) AddBack() *Selection {
 // It returns a new Selection object containing the current Selection combined
 // with the filtered previous one
 func (s *Selection) AddBackFiltered(selector string) *Selection {
+	if s.prevSel == nil {
+		return s.AddNodes()
+	}
 	return s.AddSelection(s.prevSel.Filter(selector))
 }
 
@@ -66,5 +69,8 @@ func (s *Selection) AddBackFiltered(selector string) *Selection {
 // It returns a new Selection object containing the current Selection combined
 // with the filtered previous one
 func (s *Selection) AddBackMatcher(m Matcher) *Selection {
+	if s.prevSel == nil {
+		return s.AddNodes()
+	}
 	return s.AddSelection(s.prevSel.FilterMatcher(m))
 }
