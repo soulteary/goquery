@@ -47,7 +47,7 @@ Fork releases require Go 1.26 or later and are tested on the latest two
 supported Go versions.
 
 ```sh
-go get github.com/soulteary/goquery@v1.14.0
+go get github.com/soulteary/goquery@v1.14.1
 ```
 
 Applications migrating from upstream only need to change the import path; the
@@ -107,7 +107,7 @@ go vet ./...
 
 **Note that goquery's API is now stable, and will not break.**
 
-*    **Unreleased (planned v1.14.1)** : Fix filtered `AddBack` calls on initial selections and prevent added nodes from overwriting related selections; update `golang.org/x/net` to v0.63.0. The selector-engine upgrade remains pending publication of `soulteary/cascadia v1.1.0`; the current dependency is still v1.0.0. See the [release preparation notes](docs/releases/v1.14.1.md).
+*    **2026-11-25 (v1.14.1)** : Fix filtered `AddBack` calls on initial selections and prevent added nodes from overwriting related selections; update `golang.org/x/net` to v0.63.0 and `soulteary/cascadia` to v1.1.0. See the [release notes](docs/releases/v1.14.1.md) for selector compatibility changes.
 *    **2026-10-28 (v1.14.0)** : First independently importable fork release. Use `github.com/soulteary/goquery`; replace the selector engine with `github.com/soulteary/cascadia`; add Chrome-style `SelectorForNode`; incorporate upstream fixes; improve node-based find performance; enforce 100% statement coverage; and require Go 1.26+.
 *    **2026-08-27 (v1.13.0)** : Performance improvements (thanks [@jvoisin][jvs]), add top-level `Text` function with options similar to BeautifulSoup's `get_text` (thanks [@ChrisJr404][chrisjr]), update `go.mod` dependencies, add go1.27 to the test matrix.
 *    **2026-03-15 (v1.12.0)** : Update `go.mod` dependencies, add go1.26 to the test matrix, **goquery now requires Go version 1.25+**.
